@@ -18,3 +18,9 @@ class LoginSuccessState extends AuthenticationStates{}
 class LoginUserNotFoundState extends AuthenticationStates{}
 class LoginUserWrongPasswordState extends AuthenticationStates{}
 class LoginErrorState extends AuthenticationStates{}
+
+
+
+class GetProfileDataLoading extends AuthenticationStates{}
+class GetProfileDataSuccess extends AuthenticationStates{}
+class GetProfileDataError extends AuthenticationStates{}

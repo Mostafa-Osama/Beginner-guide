@@ -1,8 +1,10 @@
+import 'package:beginner_guide/core/constants/colors/colors.dart';
 import 'package:beginner_guide/core/size_config.dart';
 import 'package:beginner_guide/presentation/Screens/HomeScreen/users/user_widget.dart';
 import 'package:beginner_guide/presentation/Screens/HomeScreen/users/users_profile.dart';
 import 'package:beginner_guide/presentation/Screens/widgets/default_text.dart';
 import 'package:beginner_guide/presentation/Screens/widgets/navigator.dart';
+import 'package:beginner_guide/presentation/Screens/widgets/snack_bar.dart';
 import 'package:beginner_guide/presentation/cubit/app_cubit/app_cubit.dart';
 import 'package:beginner_guide/presentation/cubit/app_cubit/app_states.dart';
 import 'package:flutter/material.dart';
@@ -54,9 +56,20 @@ class _UsersScreenState extends State<UsersScreen> {
                                           AppCubit.get(context).allUsers[index],
                                     ));
                               },
-                              child: UserWidget(
-                                userModel:
-                                    AppCubit.get(context).allUsers[index],
+                              child: BlocListener<AppCubit,AppStates>(
+                                listener: (context,state){
+                                  if(state is SendFriendRequestSuccessState){
+                                    defaultSnackBar(context: context,text: 'Sent Friend Request Successfully',fontColor: AppColors.whiteColor,backGroundColor: AppColors.greenColor);
+                                  }
+                                  if(state is SendFriendRequestErrorState || state is ReceiveFriendRequestErrorState){
+                                    defaultSnackBar(context: context,text: 'There\'s an error happened please try again later ' ,fontColor: AppColors.whiteColor,backGroundColor: AppColors.redColor);
+
+                                  }
+                                },
+                                child: UserWidget(
+                                  userModel:
+                                      AppCubit.get(context).allUsers[index],
+                                ),
                               ));
                         },
                         itemCount: AppCubit.get(context).allUsers.length,

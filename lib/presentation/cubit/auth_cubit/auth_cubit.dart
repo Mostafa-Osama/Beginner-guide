@@ -8,32 +8,43 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'auth_states.dart';
 
-
 class AuthenticationCubit extends Cubit<AuthenticationStates> {
   AuthenticationCubit() : super(AuthenticationInitialState());
 
   static AuthenticationCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
 
   final FirebaseFirestore _firebaseFireStore = FirebaseFirestore.instance;
 
-
   registerWithEmailAndPassword(
-      {required String ?email, required String ?password, required String?phone,required String?firstName,required String lastName,required String jobExperience,required String currentJob,required String address}) async {
+      {required String? email,
+      required String? password,
+      required String? phone,
+      required String? firstName,
+      required String lastName,
+      required String jobExperience,
+      required String currentJob,
+      required String address}) async {
     emit(RegisterLoadingState());
     try {
-      UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email!,
         password: password!,
       );
 
       emit(RegisterSuccessState());
-      createUser(email: email, phone: phone, id: userCredential.user!.uid,lastName: lastName,firstName: firstName,jobExperience:jobExperience ,currentJob: currentJob,address: address);
+      createUser(
+          email: email,
+          phone: phone,
+          id: userCredential.user!.uid,
+          lastName: lastName,
+          firstName: firstName,
+          jobExperience: jobExperience,
+          currentJob: currentJob,
+          address: address);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         emit(RegisterWeakPasswordState());
@@ -45,50 +56,85 @@ class AuthenticationCubit extends Cubit<AuthenticationStates> {
     }
   }
 
-
-
-  signInWithEmailAndPassword({required String ?email ,required String ?password}) async {
+  signInWithEmailAndPassword(
+      {required String? email, required String? password}) async {
     emit(LoginLoadingState());
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: email!,
-          password: password!,
+        email: email!,
+        password: password!,
       );
 
-      _firebaseFireStore.collection('users').doc(userCredential.user!.uid).get().then((value) {
-        userId =  value.data()!['uid'];
-        userFirstName =  value.data()!['first_name'];
-        userLastName =  value.data()!['last_name'];
-        userCurrentJob =  value.data()!['currentJob'];
+      _firebaseFireStore
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get()
+          .then((value) async {
+        userId = value.data()!['uid'];
+        userFirstName = value.data()!['first_name'];
+        userLastName = value.data()!['last_name'];
+        userCurrentJob = value.data()!['currentJob'];
+       await getProfileData(uId: userId!);
 
         emit(LoginSuccessState());
-
-
-      }).catchError((onError){});
-
+      }).catchError((onError) {});
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-
         emit(LoginUserNotFoundState());
       } else if (e.code == 'wrong-password') {
         emit(LoginUserWrongPasswordState());
       }
-    }catch(e){
+    } catch (e) {
       emit(LoginErrorState());
     }
   }
 
+  UserModel ?profileData ;
+
+  getProfileData({required String uId}) {
+    emit(GetProfileDataLoading());
+    _firebaseFireStore
+        .collection('users')
+        .doc(uId)
+        .get()
+        .then((value) {
+          profileData = UserModel.fromJson(value.data()!);
+          emit(GetProfileDataSuccess());
+
+    })
+        .catchError((onError) {
+      emit(GetProfileDataError());
+
+    });
+  }
 
   createUser(
-      {required String email, required String ?phone, required String id,required String?firstName,required String?lastName,required String?currentJob,required String?jobExperience,required String?address}) {
+      {required String email,
+      required String? phone,
+      required String id,
+      required String? firstName,
+      required String? lastName,
+      required String? currentJob,
+      required String? jobExperience,
+      required String? address}) {
     emit(CreateUserLoadingState());
-    UserModel model = UserModel(firstName: firstName,lastName: lastName ,phone: phone, email: email, uid: id,currentJob: currentJob,jobExperience: jobExperience,address: address);
-    _firebaseFireStore.collection('users').doc(id).set(model.toMap()).then((value) {
+    UserModel model = UserModel(
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone,
+        email: email,
+        uid: id,
+        currentJob: currentJob,
+        jobExperience: jobExperience,
+        address: address);
+    _firebaseFireStore
+        .collection('users')
+        .doc(id)
+        .set(model.toMap())
+        .then((value) {
       emit(CreateUserSuccessState());
-
-    }).catchError((onError){
+    }).catchError((onError) {
       emit(CreateUserErrorState());
-
     });
   }
 }

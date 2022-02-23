@@ -99,28 +99,35 @@ class AppCubit extends Cubit<AppStates> {
         .then((value) {
       emit(SendFriendRequestSuccessState());
 
+      receiveFriendRequest(receiverId: receiverId);
+
+   //receive frience request
+    }).catchError((onError) {
+      emit(SendFriendRequestErrorState());
+    });
+  }
+
+  receiveFriendRequest({required String? receiverId}){
+    emit(ReceiveFriendRequestLoadingState());
     _receivedFriendRequestModel = FriendRequestModel(
-    date: DateTime.now().toString(),
-    lastName: userLastName,
-    firstName: userFirstName,
-    senderId: userId,
-    receiverId: receiverId,
-    currentJob: userCurrentJob);
+        date: DateTime.now().toString(),
+        lastName: userLastName,
+        firstName: userFirstName,
+        senderId: userId,
+        receiverId: receiverId,
+        currentJob: userCurrentJob);
     _firebaseFireStore
         .collection('users')
         .doc(receiverId)
         .collection('received friend request')
         .doc(userId)
         .set(_receivedFriendRequestModel!.toMap())
-          .then((value) {
+        .then((value) {
       emit(ReceiveFriendRequestSuccessState());
     }
-         )
-          .catchError((onError) {
+    )
+        .catchError((onError) {
       emit(ReceiveFriendRequestErrorState());
-    });
-    }).catchError((onError) {
-      emit(SendFriendRequestErrorState());
     });
   }
 }

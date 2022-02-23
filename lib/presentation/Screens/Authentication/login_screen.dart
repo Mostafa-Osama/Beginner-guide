@@ -1,6 +1,6 @@
 import 'package:beginner_guide/core/constants/colors/colors.dart';
 import 'package:beginner_guide/presentation/Screens/Authentication/register_screen.dart';
-import 'package:beginner_guide/presentation/Screens/HomeScreen/home_layout.dart';
+import 'package:beginner_guide/presentation/Screens/Drawer/zoom_drawer.dart';
 import 'package:beginner_guide/presentation/Screens/widgets/buttons/default_elevated_button.dart';
 import 'package:beginner_guide/presentation/Screens/widgets/buttons/default_text_button.dart';
 import 'package:beginner_guide/presentation/Screens/widgets/default_text.dart';
@@ -103,7 +103,7 @@ class LoginScreen extends StatelessWidget {
                           BlocConsumer<AuthenticationCubit,AuthenticationStates>(
                             listener: (context,state){
                               if(state is LoginSuccessState){
-                                pushReplacement(context: context, screen:const HomeLayout());
+                                pushReplacement(context: context, screen: ZoomDrawerWidget());
                               }
                             },
                             builder:(context,state)=>state is LoginLoadingState? const Center(child: CircularProgressIndicator(color: AppColors.whiteColor,),):DecoratedBox(

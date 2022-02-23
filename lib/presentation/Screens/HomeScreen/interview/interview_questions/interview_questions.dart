@@ -9,18 +9,6 @@ class InterViewQuestions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig.sizeConfigInit(context);
-    return SizedBox(
-      height: SizeConfig.screenHeight!*0.8,
-      child: ListView(
-        children: const[
-
-             WebView(
-
-              initialUrl: 'https://www.javatpoint.com/flutter-interview-questions',
-
-            ),
-        ],
-      ),
-    );
+    return Container();
   }
 }

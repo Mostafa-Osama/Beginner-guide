@@ -1,8 +1,10 @@
 import 'package:beginner_guide/core/constants/colors/colors.dart';
+import 'package:beginner_guide/presentation/Screens/Drawer/zoom_drawer.dart';
 import 'package:beginner_guide/presentation/cubit/app_cubit/app_cubit.dart';
 import 'package:beginner_guide/presentation/cubit/app_cubit/app_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 
 class HomeLayout extends StatefulWidget {
@@ -22,6 +24,9 @@ class _HomeLayoutState extends State<HomeLayout> {
       listener: (context,state){},
       builder:(context,state)=> Scaffold(
         appBar: AppBar(
+          leading:  IconButton(icon: const Icon(Icons.menu),onPressed: (){
+            ZoomDrawerWidget.zoomDrawerController.toggle!();
+          },),
           title:  Text(AppCubit.get(context).appBarTitle.elementAt(AppCubit.get(context).selectedIndex)),
         ),
         body: Center(

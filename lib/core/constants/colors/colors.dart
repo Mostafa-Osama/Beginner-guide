@@ -12,6 +12,7 @@ static const Color redColor =Color(0xFFF60505);
 static const Color greyColor =Color(0xFF898484);
 static const Color lightGreenColor = Color(0xFF3F8E65);
 static const Color lightGreenColorX2 = Color(0xFF9AF6C6);
+static const Color greenColor = Color(0xFF03CE65);
 
 
 }
