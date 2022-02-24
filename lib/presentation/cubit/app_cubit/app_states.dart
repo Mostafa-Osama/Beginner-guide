@@ -21,3 +21,15 @@ class ReceiveFriendRequestSuccessState extends AppStates{}
 class ReceiveFriendRequestErrorState extends AppStates{}
 
 
+class GetAllReceivedFriendRequestLoadingState extends AppStates{}
+class GetAllReceivedFriendRequestSuccessState extends AppStates{}
+class GetAllReceivedFriendRequestErrorState extends AppStates{}
+
+class GetAllSentFriendRequestLoadingState extends AppStates{}
+class GetAllSentFriendRequestSuccessState extends AppStates{}
+class GetAllSentFriendRequestErrorState extends AppStates{}
+
+
+
+
+

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class DefaultTextFormField extends StatefulWidget {
@@ -9,16 +10,20 @@ class DefaultTextFormField extends StatefulWidget {
   final Color?enabledBorderSideColor;
   final bool ?obSecureText;
   final String? Function(String?)? validator;
+
   final String? hintText;
   final Color? fillColor;
   final IconData? suffixIcon;
+  final VoidCallback? onPressedSuffixIcon;
+
 
   final TextStyle?hintTextStyle;
   final TextStyle?textStyle;
   final String?labelText;
   final TextStyle?labelTextStyle;
   final int ?maxLine;
-  const DefaultTextFormField({Key? key,this.textEditingController,this.textInputType,this.enabledBorderRadius,this.enabledBorderSideColor,this.borderSideColor,this.defaultBorderRadius,this.obSecureText,this.validator,this.hintText,this.fillColor,this.hintTextStyle,this.textStyle,this.labelText,this.labelTextStyle,this.suffixIcon,this.maxLine}) : super(key: key);
+  final String? initialValue;
+  const DefaultTextFormField({Key? key,this.textEditingController,this.textInputType,this.enabledBorderRadius,this.enabledBorderSideColor,this.borderSideColor,this.defaultBorderRadius,this.obSecureText,this.validator,this.hintText,this.fillColor,this.hintTextStyle,this.textStyle,this.labelText,this.labelTextStyle,this.suffixIcon,this.maxLine,this.initialValue,this.onPressedSuffixIcon}) : super(key: key);
 
   @override
   State<DefaultTextFormField> createState() => _DefaultTextFormFieldState();
@@ -30,6 +35,7 @@ class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: widget.initialValue,
       maxLines: widget.maxLine,
       controller: widget.textEditingController,
       keyboardType: widget.textInputType,
@@ -40,7 +46,7 @@ class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
 obscureText: widget.obSecureText == null ? false : widget.obSecureText!,
 
       decoration: InputDecoration(
-        suffixIcon: IconButton(icon:Icon(widget.suffixIcon),onPressed: (){},),
+        suffixIcon: IconButton(icon:Icon(widget.suffixIcon),onPressed:widget.onPressedSuffixIcon ,),
         hintText:widget.hintText,
         fillColor: widget.fillColor,
         filled: true,

@@ -2,10 +2,11 @@ import 'package:beginner_guide/core/constants/colors/colors.dart';
 import 'package:beginner_guide/core/size_config.dart';
 import 'package:beginner_guide/presentation/Screens/Drawer/zoom_drawer.dart';
 import 'package:beginner_guide/presentation/Screens/EditProfile/edit_profile_screen.dart';
+import 'package:beginner_guide/presentation/Screens/MyFriendRequest/firend_request_screen.dart';
+import 'package:beginner_guide/presentation/Screens/profile_screen/profile_screen.dart';
 import 'package:beginner_guide/presentation/Screens/widgets/buttons/default_elevated_button.dart';
 import 'package:beginner_guide/presentation/Screens/widgets/default_text.dart';
 import 'package:beginner_guide/presentation/Screens/widgets/navigator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DrawerMenu extends StatelessWidget {
@@ -24,10 +25,17 @@ class DrawerMenu extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-             Padding(
+             InkWell(
+               onTap: (){
+                 ZoomDrawerWidget.zoomDrawerController.close!();
+
+                 push(context: context, screen:const ProfileScreen());
+               },
+               child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 100.0),
             child: Container(padding:const EdgeInsets.all(10),decoration: BoxDecoration(border: Border.all(color: AppColors.whiteColor),shape: BoxShape.circle),child:const Icon(Icons.person,size: 100,color: AppColors.whiteColor,)),
           ),
+             ),
             SizedBox(height: SizeConfig.screenHeight!*0.05,),
 
             InkWell(
@@ -43,26 +51,23 @@ class DrawerMenu extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: SizeConfig.screenHeight!*0.02,),
-            const Divider(color: AppColors.whiteColor,endIndent: 100,),
-            SizedBox(height: SizeConfig.screenHeight!*0.02,),
 
-            Row(
-              children: [
-                const  Icon(Icons.post_add,color: AppColors.whiteColor,),
-                SizedBox(width: SizeConfig.screenWidth!*0.02,),
-                const DefaultText(text: 'My Posts',textStyle: TextStyle(color: AppColors.whiteColor,fontSize: 20),),
-              ],
-            ),
             SizedBox(height: SizeConfig.screenHeight!*0.02,),
            const Divider(color: AppColors.whiteColor,endIndent: 100,),
             SizedBox(height: SizeConfig.screenHeight!*0.02,),
-            Row(
-              children: [
-                const  Icon(Icons.person_add,color: AppColors.whiteColor,),
-                SizedBox(width: SizeConfig.screenWidth!*0.02,),
-                const  DefaultText(text: 'My FriendRequest',textStyle: TextStyle(color: AppColors.whiteColor,fontSize: 20),),
-              ],
+            InkWell(
+              onTap: (){
+                ZoomDrawerWidget.zoomDrawerController.close!();
+
+                push(context: context, screen:const FriendRequestScreen() );
+              },
+              child: Row(
+                children: [
+                  const  Icon(Icons.person_add,color: AppColors.whiteColor,),
+                  SizedBox(width: SizeConfig.screenWidth!*0.02,),
+                  const  DefaultText(text: 'My FriendRequest',textStyle: TextStyle(color: AppColors.whiteColor,fontSize: 20),),
+                ],
+              ),
             ),
             SizedBox(height: SizeConfig.screenHeight!*0.02,),
             const Divider(color: AppColors.whiteColor,endIndent: 100,),
@@ -72,6 +77,17 @@ class DrawerMenu extends StatelessWidget {
                 const  Icon(Icons.message_outlined,color: AppColors.whiteColor,),
                 SizedBox(width: SizeConfig.screenWidth!*0.02,),
                 const   DefaultText(text: 'My Messages',textStyle: TextStyle(color: AppColors.whiteColor,fontSize: 20),),
+              ],
+            ),
+            SizedBox(height: SizeConfig.screenHeight!*0.02,),
+            const Divider(color: AppColors.whiteColor,endIndent: 100,),
+            SizedBox(height: SizeConfig.screenHeight!*0.02,),
+
+            Row(
+              children: [
+                const  Icon(Icons.article,color: AppColors.whiteColor,),
+                SizedBox(width: SizeConfig.screenWidth!*0.02,),
+                const DefaultText(text: 'Articles',textStyle: TextStyle(color: AppColors.whiteColor,fontSize: 20),),
               ],
             ),
             SizedBox(height: SizeConfig.screenHeight!*0.02,),

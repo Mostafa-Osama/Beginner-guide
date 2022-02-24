@@ -11,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'app_states.dart';
 
-
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
 
@@ -56,14 +55,17 @@ class AppCubit extends Cubit<AppStates> {
 
   List<PostModel> allPosts = [];
 
-
   getAllPosts({required String? userId}) {
     emit(GetAllPostsLoadingState());
     allPosts = [];
-    _firebaseFireStore.collection('users').doc(userId).collection('posts').get().then((value) {
+    _firebaseFireStore
+        .collection('users')
+        .doc(userId)
+        .collection('posts')
+        .get()
+        .then((value) {
       for (var element in value.docs) {
         allPosts.add(PostModel.fromJson(element.data()));
-
       }
 
       emit(GetAllPostsSuccessState());
@@ -72,6 +74,52 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
+  List<FriendRequestModel> allReceivedFriendRequest = [];
+
+  getAllReceivedFriendRequest() {
+    emit(GetAllReceivedFriendRequestLoadingState());
+    allReceivedFriendRequest = [];
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('received friend request')
+        .get()
+        .then((value) {
+          for(var element in value.docs){
+            allReceivedFriendRequest.add(FriendRequestModel.fromJson(element.data()));
+          }
+          emit(GetAllReceivedFriendRequestSuccessState());
+
+    })
+        .catchError((onError) {
+      emit(GetAllReceivedFriendRequestErrorState());
+
+    });
+  }
+
+  List<FriendRequestModel> allSentFriendRequest = [];
+
+  getAllSentFriendRequest() {
+    emit(GetAllSentFriendRequestLoadingState());
+    allSentFriendRequest = [];
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('sent friend request')
+        .get()
+        .then((value) {
+      for(var element in value.docs){
+        allSentFriendRequest.add(FriendRequestModel.fromJson(element.data()));
+      }
+      emit(GetAllSentFriendRequestSuccessState());
+
+    })
+        .catchError((onError) {
+      emit(GetAllSentFriendRequestErrorState());
+
+    });
+  }
 
   FriendRequestModel? _receivedFriendRequestModel;
   FriendRequestModel? _sentFriendRequestModel;
@@ -101,13 +149,13 @@ class AppCubit extends Cubit<AppStates> {
 
       receiveFriendRequest(receiverId: receiverId);
 
-   //receive frience request
+      //receive frience request
     }).catchError((onError) {
       emit(SendFriendRequestErrorState());
     });
   }
 
-  receiveFriendRequest({required String? receiverId}){
+  receiveFriendRequest({required String? receiverId}) {
     emit(ReceiveFriendRequestLoadingState());
     _receivedFriendRequestModel = FriendRequestModel(
         date: DateTime.now().toString(),
@@ -124,9 +172,7 @@ class AppCubit extends Cubit<AppStates> {
         .set(_receivedFriendRequestModel!.toMap())
         .then((value) {
       emit(ReceiveFriendRequestSuccessState());
-    }
-    )
-        .catchError((onError) {
+    }).catchError((onError) {
       emit(ReceiveFriendRequestErrorState());
     });
   }

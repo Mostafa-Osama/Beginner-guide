@@ -71,10 +71,8 @@ class AuthenticationCubit extends Cubit<AuthenticationStates> {
           .get()
           .then((value) async {
         userId = value.data()!['uid'];
-        userFirstName = value.data()!['first_name'];
-        userLastName = value.data()!['last_name'];
-        userCurrentJob = value.data()!['currentJob'];
-       await getProfileData(uId: userId!);
+
+        await getProfileData(uId: userId!);
 
         emit(LoginSuccessState());
       }).catchError((onError) {});
@@ -99,6 +97,13 @@ class AuthenticationCubit extends Cubit<AuthenticationStates> {
         .get()
         .then((value) {
           profileData = UserModel.fromJson(value.data()!);
+          userEmail = profileData!.email;
+          userPhone = profileData!.phone;
+          userFirstName = profileData!.firstName;
+          userLastName = profileData!.lastName;
+          userCurrentJob = profileData!.currentJob;
+          userExperience = profileData!.jobExperience;
+          userAddress = profileData!.address;
           emit(GetProfileDataSuccess());
 
     })
